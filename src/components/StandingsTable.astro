@@ -1,0 +1,95 @@
+---
+const { standings, teamId } = Astro.props;
+---
+
+<section class="table">
+  <h2>Clasificación de La Liga</h2>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Pos</th>
+          <th>Equipo</th>
+          <th>PJ</th>
+          <th>V</th>
+          <th>Pts</th>
+        </tr>
+      </thead>
+      <tbody>
+        {standings.map((row) => (
+          <tr class={row.team.id === teamId ? 'highlight' : ''}>
+            <td>{row.rank}</td>
+            <td class="team-cell">
+              <img src={row.team.logo} alt={row.team.name} />
+              <span>{row.team.name}</span>
+            </td>
+            <td>{row.all.played}</td>
+            <td>{row.all.win}</td>
+            <td>{row.points}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .table {
+    margin-top: 10px;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .table-wrapper {
+    background: #080915;
+    border-radius: 20px;
+    padding: 10px 10px 6px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  th,
+  td {
+    padding: 6px 4px;
+    text-align: left;
+  }
+
+  th {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 11px;
+  }
+
+  tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .team-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .team-cell img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .highlight {
+    background: linear-gradient(90deg, rgba(56, 243, 142, 0.12), transparent);
+  }
+
+  .highlight td {
+    color: var(--text-main);
+    font-weight: 600;
+  }
+</style>

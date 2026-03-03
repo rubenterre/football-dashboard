@@ -1,0 +1,150 @@
+---
+const { fixture } = Astro.props;
+
+if (!fixture) {
+  return null; // O puedes retornar un mensaje de "No hay partidos"
+}
+const leagueName = fixture.league?.name ?? "Liga";
+const venue = fixture.fixture?.venue?.name ?? "Estadio TBD"; // Ojo: venue suele estar dentro de fixture.fixture
+const round = fixture.league?.round ?? "";
+
+// Datos de equipos y goles
+const home = fixture.teams.home;
+const away = fixture.teams.away;
+const homeGoals = fixture.goals.home ?? 0;
+const awayGoals = fixture.goals.away ?? 0;
+
+// Estado
+const status = fixture.fixture.status; // short, elapsed
+const isLive = ['1H','HT','2H','ET','BT','P'].includes(status.short);
+const isFinished = ['FT','AET','PEN'].includes(status.short);
+
+let statusLabel = '';
+if (isLive) statusLabel = `${status.elapsed}'`;
+else if (isFinished) statusLabel = 'Final';
+else statusLabel = new Date(fixture.fixture.date).toLocaleString('es-ES', {
+  weekday: 'short',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+---
+
+<section class="match">
+  <header class="match-header">
+    <div class="venue">
+      <span>{venue}</span>
+      <span class="round">{round}</span>
+    </div>
+    {isLive && <span class="badge-live">Directo</span>}
+  </header>
+
+  <div class="score-box">
+    <div class="team">
+      <img src={home.logo} alt={home.name} />
+      <span class="team-name">{home.name}</span>
+    </div>
+
+    <div class="score">
+      <span>{homeGoals}</span>
+      <span>-</span>
+      <span>{awayGoals}</span>
+    </div>
+
+    <div class="team">
+      <img src={away.logo} alt={away.name} />
+      <span class="team-name">{away.name}</span>
+    </div>
+  </div>
+
+  <footer class="match-footer">
+    <span class="status">{statusLabel}</span>
+    <span class="league">{leagueName}</span>
+  </footer>
+</section>
+
+<style>
+  .match {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .venue {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .round {
+    opacity: 0.8;
+  }
+
+  .badge-live {
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: #32e46d;
+    color: #020308;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .score-box {
+    background: #050712;
+    border-radius: 24px;
+    padding: 18px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .team img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .team-name {
+    font-size: 13px;
+  }
+
+  .score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 26px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 18px;
+    background: radial-gradient(circle at top, #1e2135 0, #050610 60%);
+  }
+
+  .match-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .status {
+    font-variant-numeric: tabular-nums;
+  }
+</style>

@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MatchCard from '../components/MatchCard.astro';
+import StandingsTable from '../components/StandingsTable.astro';
+import {
+  fetchCeltaFromHa,
+  fetchStandingsFromHa,
+} from '../lib/espn.js';
+
+const celta = await fetchCeltaFromHa();
+const standings = await fetchStandingsFromHa();
+---
+
+<Layout title="Celta de Vigo | La Liga">
+  <MatchCard fixture={celta} />
+  <StandingsTable standings={standings} />
+</Layout>

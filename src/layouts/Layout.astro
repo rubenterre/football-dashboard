@@ -1,0 +1,49 @@
+---
+const { title = 'Celta Dashboard' } = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+  </head>
+  <body class="page">
+    <main class="card">
+      <slot /> <!-- aquí se inyecta el contenido de index.astro -->
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: dark;
+    --bg: #05060a;
+    --card: #111321;
+    --accent: #38f38e;
+    --accent-muted: #25263a;
+    --text-main: #f8f9ff;
+    --text-muted: #9ea3c7;
+  }
+
+  body.page {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+      sans-serif;
+    background: radial-gradient(circle at top, #20233a 0, #05060a 45%);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+    margin: 16px;
+    padding: 20px 18px 24px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #15172a, #080910);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+  }
+</style>
